@@ -1,4 +1,4 @@
-package com.s2r.accesscontrol.model;
+package com.s2r.accesscontrol.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,6 +1,6 @@
 package com.s2r.accesscontrol.repository;
 
-import com.s2r.accesscontrol.model.UserModel;
+import com.s2r.accesscontrol.model.entity.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
