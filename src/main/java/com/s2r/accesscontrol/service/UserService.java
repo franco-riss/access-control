@@ -8,6 +8,8 @@ import com.s2r.accesscontrol.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService implements IUserService{
     @Autowired
@@ -23,5 +25,22 @@ public class UserService implements IUserService{
     public UserResponseDto readUserById(long id){
         UserModel user = repository.findById(id).orElse(null);
         return IUserMapper.INSTANCE.modelToResponseDto(user);
+    }
+    public List<UserResponseDto> readUsers(){
+        List<UserModel> users = repository.findAll();
+        return IUserMapper.INSTANCE.modelListToResponseDtoList(users);
+    }
+
+    // UPDATE
+    public UserResponseDto updateUserById(UserRequestDto userRequestDto, long id) {
+        UserModel userModel = IUserMapper.INSTANCE.requestDtoToModel(userRequestDto);
+        userModel.setUserId(id);
+        return IUserMapper.INSTANCE.modelToResponseDto(repository.save(userModel));
+    }
+
+    // DELETE
+    public void deleteUserById(long id){
+        UserModel user = repository.findById(id).orElse(null);
+        repository.delete(user);
     }
 }
