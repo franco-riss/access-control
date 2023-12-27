@@ -17,8 +17,10 @@ public interface ILogMapper {
 
     @IterableMapping(elementTargetType = LogResponseDto.class)
     List<LogResponseDto> modelListToResponseDtoList(List<LogModel> logModelList);
+
     @Mapping(target = "checkDateTime", ignore = true)
     LogModel requestDtoToModel(LogRequestDto logRequestDto);
+
     @AfterMapping
     default void setCheckDateTime(LogRequestDto logRequestDto, @MappingTarget LogModel logModel) {
         logModel.setCheckDateTime(LocalDateTime.now());

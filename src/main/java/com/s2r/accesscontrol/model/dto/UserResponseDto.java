@@ -2,6 +2,8 @@ package com.s2r.accesscontrol.model.dto;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class UserResponseDto {
     private long userId;
@@ -10,4 +12,5 @@ public class UserResponseDto {
     private String sector;
     private String phone;
     private String email;
+    private List<LogResponseDto> logs;
 }

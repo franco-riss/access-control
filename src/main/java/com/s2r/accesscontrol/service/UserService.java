@@ -34,7 +34,9 @@ public class UserService implements IUserService{
     // UPDATE
     public UserResponseDto updateUserById(UserRequestDto userRequestDto, long id) {
         UserModel userModel = IUserMapper.INSTANCE.requestDtoToModel(userRequestDto);
+        UserModel existingUserModel = repository.findById(id).orElse(null);
         userModel.setUserId(id);
+        userModel.setLogModels(existingUserModel.getLogModels());
         return IUserMapper.INSTANCE.modelToResponseDto(repository.save(userModel));
     }
 

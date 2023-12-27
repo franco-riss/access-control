@@ -35,4 +35,7 @@ public class UserModel {
     @CollectionTable(name = "user_tags", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "tag", nullable = false)
     private List<String> tags;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    private List<LogModel> logModels;
 }

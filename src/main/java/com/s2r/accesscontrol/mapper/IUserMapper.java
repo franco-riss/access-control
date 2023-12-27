@@ -5,6 +5,7 @@ import com.s2r.accesscontrol.model.dto.UserResponseDto;
 import com.s2r.accesscontrol.model.entity.UserModel;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -14,7 +15,10 @@ public interface IUserMapper {
     IUserMapper INSTANCE = Mappers.getMapper(IUserMapper.class);
 
     UserModel requestDtoToModel(UserRequestDto userRequestDto);
+
+    @Mapping(target = "logs", source = "logModels")
     UserResponseDto modelToResponseDto(UserModel userModel);
+
     @IterableMapping(elementTargetType = UserResponseDto.class)
     List<UserResponseDto> modelListToResponseDtoList(List<UserModel> userModelList);
 }
