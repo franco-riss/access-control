@@ -19,4 +19,7 @@ public interface IUserService {
 
     // DELETE
     void deleteUserById(long id);
+
+    // Used to identify tag's owner
+    long readUserIdByTag(String tag);
 }

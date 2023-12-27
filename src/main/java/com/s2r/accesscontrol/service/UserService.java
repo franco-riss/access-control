@@ -43,4 +43,10 @@ public class UserService implements IUserService{
         UserModel user = repository.findById(id).orElse(null);
         repository.delete(user);
     }
+
+    // Used to identify tag's owner
+    public long readUserIdByTag(String tag) {
+        UserModel user = repository.findByTagsContains(tag).orElse(null);
+        return user.getUserId();
+    }
 }
