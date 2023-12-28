@@ -1,5 +1,8 @@
 package com.s2r.accesscontrol.service;
 
+import com.s2r.accesscontrol.exception.EmptyListException;
+import com.s2r.accesscontrol.exception.TagAlreadyExistException;
+import com.s2r.accesscontrol.exception.UserNotFoundException;
 import com.s2r.accesscontrol.mapper.IUserMapper;
 import com.s2r.accesscontrol.model.dto.UserRequestDto;
 import com.s2r.accesscontrol.model.dto.UserResponseDto;
@@ -17,24 +20,31 @@ public class UserService implements IUserService{
 
     // CREATE
     public UserResponseDto createUser(UserRequestDto userRequestDto){
+        if(repository.existsByTagsIn(userRequestDto.getTags()))
+            throw new TagAlreadyExistException();
+
         UserModel user = IUserMapper.INSTANCE.requestDtoToModel(userRequestDto);
         return IUserMapper.INSTANCE.modelToResponseDto(repository.save(user));
     }
 
     // READ
     public UserResponseDto readUserById(long id){
-        UserModel user = repository.findById(id).orElse(null);
+        UserModel user = repository.findById(id).orElseThrow(UserNotFoundException::new);
         return IUserMapper.INSTANCE.modelToResponseDto(user);
     }
     public List<UserResponseDto> readUsers(){
         List<UserModel> users = repository.findAll();
-        return IUserMapper.INSTANCE.modelListToResponseDtoList(users);
+
+        if(users.isEmpty())
+            throw new EmptyListException();
+        else
+            return IUserMapper.INSTANCE.modelListToResponseDtoList(users);
     }
 
     // UPDATE
     public UserResponseDto updateUserById(UserRequestDto userRequestDto, long id) {
         UserModel userModel = IUserMapper.INSTANCE.requestDtoToModel(userRequestDto);
-        UserModel existingUserModel = repository.findById(id).orElse(null);
+        UserModel existingUserModel = repository.findById(id).orElseThrow(UserNotFoundException::new);
         userModel.setUserId(id);
         userModel.setLogModels(existingUserModel.getLogModels());
         return IUserMapper.INSTANCE.modelToResponseDto(repository.save(userModel));
@@ -42,13 +52,13 @@ public class UserService implements IUserService{
 
     // DELETE
     public void deleteUserById(long id){
-        UserModel user = repository.findById(id).orElse(null);
+        UserModel user = repository.findById(id).orElseThrow(UserNotFoundException::new);
         repository.delete(user);
     }
 
     // Used to identify tag's owner
     public long readUserIdByTag(String tag) {
-        UserModel user = repository.findByTagsContains(tag).orElse(null);
+        UserModel user = repository.findByTagsContains(tag).orElseThrow(UserNotFoundException::new);
         return user.getUserId();
     }
 }
